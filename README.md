@@ -1,6 +1,9 @@
 # pymarkov
 Python implementation of a simple Markov chain
 
+# Warning
+This is still in it's beta stages, and many breaking changes will be made in the future.  This is not the implementation to use in production.
+
 # Installation
 To install, simply clone this repo to your computer:
 
