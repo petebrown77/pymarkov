@@ -78,6 +78,19 @@ class MarkovChain(object):
         return future
 
 
+def generate_from_sequence(sequence):
+    """
+    If we do not know the states, and are only given a sequence,
+    this function will transform the sequence into a Markov chain.
+    
+    sequence -> list: list containing possible states
+    """
+    states = set(sequence)
+    chain = MarkovChain(list(states))
+    chain.generate_tmatrix(sequence)
+    
+    return chain
+
     
 if __name__ == "__main__":
 
@@ -92,7 +105,8 @@ if __name__ == "__main__":
 
     sequence = chain.generate_states("Snowy", no=100)
 
-    newChain = MarkovChain(["Sunny", "Rainy", "Snowy"])
-    newChain.generate_tmatrix(sequence)
+    #newChain = MarkovChain(["Sunny", "Rainy", "Snowy"])
+    #newChain.generate_tmatrix(sequence)
+    newChain = generate_from_sequence(sequence)
 
     print(newChain.generate_states("Sunny", no=20))
