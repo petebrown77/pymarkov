@@ -12,6 +12,9 @@ class MarkovChain(object):
         if t_matrix:
             self.transistion_matrix = t_matrix
 
+    def _row_mod(self, row):
+        if (sum(row) > 0):
+            return row / sum(row)
 
     def generate_tmatrix(self, sequence):
         """
@@ -35,11 +38,35 @@ class MarkovChain(object):
             
             s = sum(row)
             if s > 0:
-                row[:] = [f / s for f in row]
+                row = [f / s for f in row]
 
 
         #Set transistion matrix value here
         self.transistion_matrix = matrix
+
+    def generate_tmatrix_2(self, sequence):
+        """
+        Given a sequence, generate a transition matrix.
+        sequence: list -> list of values to generate matrix from.
+        """
+        n = len(set(sequence))
+
+
+        #To allow differnt types of data,
+        #We need to setup a dittionary
+        #That maps to each value within the sequence
+        seq_dict = {j: i for i, j in zip(list(range(n)), set(sequence))}
+
+        matrix = np.array([[0] * n for _ in range(n)])
+
+        for (i, j) in zip(sequence, sequence[1:]):
+            matrix[seq_dict[i]][seq_dict[j]] += 1
+
+        jeff = np.apply_along_axis(self._row_mod, 1, matrix)
+
+
+        #Set transistion matrix value here
+        self.transistion_matrix = jeff
 
 
     def normalize_weights(self, weights):
@@ -87,7 +114,7 @@ def generate_from_sequence(sequence):
     """
     states = set(sequence)
     chain = MarkovChain(list(states))
-    chain.generate_tmatrix(sequence)
+    chain.generate_tmatrix_2(sequence)
     
     return chain
 
